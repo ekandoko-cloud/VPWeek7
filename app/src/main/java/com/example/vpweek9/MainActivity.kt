@@ -18,8 +18,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VPWEEK9Theme(darkTheme = true, dynamicColor = false) {
-              //PokemonScreen() // Soal 1
-                AppNavHost() // Soal 2
+               PokemonScreen() // Soal 1
+                //AppNavHost() // Soal 2
             }
         }
     }
