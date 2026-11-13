@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.vpweek9.soal2.data.remote.ServiceLocator
+import com.example.vpweek9.soal2.data.repository.MusicRepository
 import com.example.vpweek9.soal2.model.Album
 import com.example.vpweek9.soal2.model.Artist
-import com.example.vpweek9.soal2.data.repository.MusicRepository
 import com.example.vpweek9.soal2.util.toUserMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,7 +37,8 @@ class ArtistViewModel(
         viewModelScope.launch {
             repository.getArtist(name)
                 .onSuccess { artist ->
-                    val albums = repository.getAlbums(name).getOrDefault(emptyList())
+                    val albums =
+                        repository.getAlbums(artist.id, artist.name).getOrDefault(emptyList())
                     _uiState.value = ArtistUiState(artist = artist, albums = albums)
                 }
                 .onFailure { e -> _uiState.value = ArtistUiState(error = e.toUserMessage()) }

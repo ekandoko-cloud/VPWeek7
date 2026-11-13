@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -25,8 +26,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vpweek9.soal2.ui.widgets.AlbumCard
 import com.example.vpweek9.soal2.ui.widgets.ArtistInfo
+import com.example.vpweek9.soal2.ui.widgets.CountBadge
 import com.example.vpweek9.soal2.ui.widgets.ErrorBox
 import com.example.vpweek9.soal2.ui.widgets.LoadingBox
+import com.example.vpweek9.soal2.ui.widgets.MusicBg
+import com.example.vpweek9.soal2.ui.widgets.MusicBorder
+import com.example.vpweek9.soal2.ui.widgets.MusicGreen
+import com.example.vpweek9.soal2.ui.widgets.MusicHeader
+import com.example.vpweek9.soal2.ui.widgets.MusicMuted
+import com.example.vpweek9.soal2.ui.widgets.MusicSurface
 import com.example.vpweek9.soal2.viewmodel.ArtistViewModel
 
 @Composable
@@ -39,71 +47,83 @@ fun ArtistScreen(
     var expanded by rememberSaveable { mutableStateOf(false) }
     val artist = uiState.artist
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        Text("Music Artist", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+    Surface(Modifier.fillMaxSize(), color = MusicBg, contentColor = Color.White) {
+        Column(
+            modifier = Modifier
+                .safeDrawingPadding()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            MusicHeader()
 
-        OutlinedTextField(
-            value = query,
-            onValueChange = { query = it },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            leadingIcon = {
-                Icon(
-                    Icons.Filled.Search,
-                    contentDescription = "Search",
-                    tint = Color(0xFF1DB954)
-                )
-            },
-            trailingIcon = {
-                IconButton(onClick = { query = "" }) {
-                    Icon(Icons.Filled.Close, contentDescription = "Clear")
-                }
-            },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(onSearch = { viewModel.search(query) }),
-        )
-
-        when {
-            uiState.isLoading -> LoadingBox()
-            uiState.error != null -> ErrorBox(
-                uiState.error.orEmpty(),
-                onRetry = { viewModel.search(query) })
-
-            artist != null -> LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    ArtistInfo(
-                        artist = artist,
-                        expanded = expanded,
-                        onToggle = { expanded = !expanded })
-                }
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Column {
-                            Text("Diskografi Album", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                            Text("Koleksi rilisan resmi", fontSize = 12.sp)
-                        }
-                        Text(
-                            "${uiState.albums.size} Album",
-                            color = Color(0xFF1DB954),
-                            fontWeight = FontWeight.Bold
-                        )
+            OutlinedTextField(
+                value = query,
+                onValueChange = { query = it },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                shape = RoundedCornerShape(16.dp),
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Search,
+                        contentDescription = "Search",
+                        tint = MusicGreen
+                    )
+                },
+                trailingIcon = {
+                    IconButton(onClick = { query = "" }) {
+                        Icon(Icons.Filled.Close, contentDescription = "Clear", tint = MusicMuted)
                     }
-                }
-                items(uiState.albums) { album ->
-                    AlbumCard(album = album, onClick = { onAlbumClick(album.id) })
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MusicSurface,
+                    unfocusedContainerColor = MusicSurface,
+                    focusedBorderColor = MusicGreen,
+                    unfocusedBorderColor = MusicBorder,
+                    cursorColor = MusicGreen,
+                ),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = { viewModel.search(query) }),
+            )
+
+            when {
+                uiState.isLoading -> LoadingBox()
+                uiState.error != null -> ErrorBox(
+                    uiState.error.orEmpty(),
+                    onRetry = { viewModel.search(query) })
+
+                artist != null -> LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        ArtistInfo(
+                            artist = artist,
+                            expanded = expanded,
+                            onToggle = { expanded = !expanded })
+                    }
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column {
+                                Text(
+                                    "Diskografi Album",
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text("Koleksi rilisan resmi", fontSize = 12.sp, color = MusicMuted)
+                            }
+                            CountBadge("${uiState.albums.size} Album")
+                        }
+                    }
+                    items(uiState.albums) { album ->
+                        AlbumCard(album = album, onClick = { onAlbumClick(album.id) })
+                    }
                 }
             }
         }

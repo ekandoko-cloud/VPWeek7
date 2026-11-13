@@ -1,19 +1,23 @@
 package com.example.vpweek9.soal2.data.dto
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 @Serializable
 data class ArtistResponseDto(
     val artists: List<ArtistDto>? = null,
 )
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class ArtistDto(
+    @SerialName("idArtist") val id: String = "",
     @SerialName("strArtist") val name: String = "",
     @SerialName("strGenre") val genre: String? = null,
     @SerialName("strCountry") val country: String? = null,
-    @SerialName("strBiographyEN") val biography: String? = null,
+    @SerialName("strBiography") @JsonNames("strBiographyEN") val biography: String? = null,
     @SerialName("strArtistThumb") val thumb: String? = null,
     @SerialName("strArtistBanner") val banner: String? = null,
     @SerialName("strArtistFanart") val fanart: String? = null,
@@ -24,6 +28,7 @@ data class AlbumResponseDto(
     val album: List<AlbumDto>? = null,
 )
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class AlbumDto(
     @SerialName("idAlbum") val id: String = "",
@@ -32,7 +37,7 @@ data class AlbumDto(
     @SerialName("intYearReleased") val year: String? = null,
     @SerialName("strGenre") val genre: String? = null,
     @SerialName("strAlbumThumb") val cover: String? = null,
-    @SerialName("strDescriptionEN") val description: String? = null,
+    @SerialName("strDescription") @JsonNames("strDescriptionEN") val description: String? = null,
 )
 
 @Serializable

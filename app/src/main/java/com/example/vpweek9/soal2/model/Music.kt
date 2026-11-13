@@ -1,11 +1,13 @@
 package com.example.vpweek9.soal2.model
 
 data class Artist(
+    val id: String,
     val name: String,
     val genre: String,
     val country: String,
     val biography: String,
-    val imageUrl: String?,
+    val thumbUrl: String?,
+    val bannerUrl: String?,
 )
 
 data class Album(

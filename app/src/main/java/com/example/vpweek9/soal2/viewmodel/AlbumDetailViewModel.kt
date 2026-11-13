@@ -54,7 +54,6 @@ class AlbumDetailViewModel(
                 }
         }
     }
-
     companion object {
         val Factory = viewModelFactory {
             initializer {

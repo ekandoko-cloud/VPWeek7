@@ -9,11 +9,13 @@ import com.example.vpweek9.soal2.model.Track
 import java.util.Locale
 
 fun ArtistDto.toDomain() = Artist(
+    id = id,
     name = name,
     genre = genre.orEmpty(),
     country = country.orEmpty(),
     biography = biography.orEmpty(),
-    imageUrl = banner ?: fanart ?: thumb,
+    thumbUrl = thumb,
+    bannerUrl = fanart ?: banner ?: thumb,
 )
 
 fun AlbumDto.toDomain() = Album(

@@ -9,13 +9,12 @@ import retrofit2.http.Query
 interface MusicApi {
     @GET("search.php")
     suspend fun searchArtist(@Query("s") name: String): ArtistResponseDto
-
     @GET("searchalbum.php")
     suspend fun searchAlbums(@Query("s") name: String): AlbumResponseDto
-
+    @GET("album.php")
+    suspend fun getAlbumsByArtist(@Query("i") artistId: String): AlbumResponseDto
     @GET("album.php")
     suspend fun getAlbum(@Query("m") albumId: String): AlbumResponseDto
-
     @GET("track.php")
     suspend fun getTracks(@Query("m") albumId: String): TrackResponseDto
 }
